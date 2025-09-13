@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра со словами на татарском</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Default theme (light) */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-weight: 500;
+            font-size: 1.5rem;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: inherit;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Theme Selector Styles */
+        .theme-selector {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: inherit;
+            margin-left: 10px;
+        }
+
+        .theme-selector:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            background-color: #181A20;
+            color: #e3eafc;
+        }
+
+        body.dark-theme .header {
+            background-color: #23272b;
+        }
+
+        body.dark-theme .translation-input {
+            background-color: #23272b;
+            border: 1px solid #23272b;
+            color: #e3eafc;
+        }
+
+        body.dark-theme .submit-button {
+            background-color: #43A047;
+        }
+
+        body.dark-theme .submit-button:hover {
+            background-color: #388E3C;
+        }
+
+        body.dark-theme .submit-button:disabled {
+            background-color: #4a4a4a;
+        }
+
+        body.dark-theme .theme-selector {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-theme .theme-selector:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Teal Theme */
+        body.teal-theme {
+            background-color: #A1D2D8;
+        }
+
+        body.teal-theme .header {
+            background-color: #007896ff;
+        }
+
+        body.teal-theme .translation-input {
+            background-color: #b2ebf2;
+            border: 1px solid #7fd8d8;
+            color: #0f4380ff;
+        }
+
+        body.teal-theme .submit-button {
+            background-color: #7fd8d8;
+        }
+
+        body.teal-theme .submit-button:hover {
+            background-color: #5fb0c9ff;
+        }
+
+        body.teal-theme .submit-button:disabled {
+            background-color: #80cbc4;
+        }
+
+        body.teal-theme .theme-selector {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        body.teal-theme .theme-selector:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Cappuccino Theme */
+        body.cappuccino-theme {
+            background-color: #1a1520;
+            color: #f0ebf5;
+        }
+
+        body.cappuccino-theme .header {
+            background-color: #241e2f;
+        }
+
+        body.cappuccino-theme .translation-input {
+            background-color: #241e2f;
+            border: 1px solid #3d2f47;
+            color: #f0ebf5;
+        }
+
+        body.cappuccino-theme .submit-button {
+            background-color: #4a3d56;
+        }
+
+        body.cappuccino-theme .submit-button:hover {
+            background-color: #554262;
+        }
+
+        body.cappuccino-theme .submit-button:disabled {
+            background-color: #7a6b82;
+        }
+
+        body.cappuccino-theme .theme-selector {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.cappuccino-theme .theme-modal-header {
+            border-bottom: 1px solid #3d2f47;
+            color: #f0ebf5;
+        }
+
+        body.cappuccino-theme .theme-option {
+            color: #f0ebf5;
+        }
+
+        body.cappuccino-theme .theme-option:hover {
+            background-color: rgba(74, 61, 86, 0.3);
+        }
+
+        body.cappuccino-theme .theme-option-icon {
+            color: #f0ebf5;
+        }
+
+        body.cappuccino-theme .theme-selector:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Cyberpunk Theme */
+        body.cyberpunk-theme {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        body.cyberpunk-theme .header {
+            background-color: #0a0a0a;
+        }
+
+        body.cyberpunk-theme .translation-input {
+            background-color: #0a0a0a;
+            border: 1px solid #333333;
+            color: #ffffff;
+        }
+
+        body.cyberpunk-theme .submit-button {
+            background-color: #00ff41;
+            color: #000000;
+        }
+
+        body.cyberpunk-theme .submit-button:hover {
+            background-color: #00cc33;
+        }
+
+        body.cyberpunk-theme .submit-button:disabled {
+            background-color: #666666;
+            color: #ffffff;
+        }
+
+        body.cyberpunk-theme .theme-selector {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00ff41;
+        }
+
+        body.cyberpunk-theme .theme-selector:hover {
+            background: rgba(0, 255, 65, 0.2);
+            border: 1px solid #00ff41;
+        }
+
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word-display {
+            font-size: 3rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            text-align: center;
+            min-height: 60px;
+            transition: all 0.3s ease;
+        }
+
+        .translation-input {
+            width: 300px;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 24px;
+            outline: none;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        .translation-input:focus {
+            border-color: #4CAF50;
+        }
+
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 30px;
+        }
+
+        .submit-button:hover {
+            background-color: #43A047;
+        }
+
+        .submit-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .feedback {
+            font-size: 1.2rem;
+            min-height: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .correct {
+            color: #4CAF50;
+        }
+
+        .incorrect {
+            color: #f44336;
+        }
+
+        .floating-word {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: 500;
+            animation: float 8s linear forwards;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(200px);
+                opacity: 0;
+            }
+        }
+
+        /* Theme Modal Styles */
+        .theme-modal {
+            display: none;
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 10px;
+            z-index: 1000;
+            min-width: 200px;
+        }
+
+        .dark-theme .theme-modal {
+            background: rgba(35, 39, 43, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .teal-theme .theme-modal {
+            background: rgba(178, 235, 242, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .cappuccino-theme .theme-modal {
+            background: rgba(36, 30, 47, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .cyberpunk-theme .theme-modal {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #00ff41;
+        }
+
+        .theme-modal-header {
+            padding: 10px 15px;
+            font-weight: 500;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dark-theme .theme-modal-header {
+            border-bottom: 1px solid #23272b;
+        }
+
+        .teal-theme .theme-modal-header {
+            border-bottom: 1px solid #7fd8d8;
+        }
+
+        .cappuccino-theme .theme-modal-header {
+            border-bottom: 1px solid #3d2f47;
+            color: #f0ebf5;
+        }
+
+        .cyberpunk-theme .theme-modal-header {
+            border-bottom: 1px solid #333333;
+            color: #00ff41;
+        }
+
+        .theme-option {
+            background: none;
+            border: none;
+            padding: 12px 15px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .theme-option:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .dark-theme .theme-option:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .teal-theme .theme-option:hover {
+            background-color: rgba(127, 216, 216, 0.2);
+        }
+
+        .cappuccino-theme .theme-option:hover {
+            background-color: rgba(74, 61, 86, 0.3);
+        }
+
+        .cyberpunk-theme .theme-option:hover {
+            background-color: rgba(0, 255, 65, 0.1);
+        }
+
+        .theme-option-icon {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        /* Overlay for modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Игра со словами на татарском</h1>
+        <div style="display: flex; align-items: center;">
+            <button class="back-button" id="backButton" title="Назад">←</button>
+            <button class="theme-selector" id="themeSelector" title="Сменить тему">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 2V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19.07 4.93L17.66 6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.34 17.66L4.93 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19.07 19.07L17.66 17.66" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.34 6.34L4.93 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <div class="game-container" id="gameContainer">
+        <div class="word-display" id="wordDisplay">Готовы?</div>
+        <input type="text" class="translation-input" id="translationInput" placeholder="Введите перевод..." autocomplete="off">
+        <button class="submit-button" id="submitButton" disabled>Проверить</button>
+        <div class="score-display">Счет: <span id="score">0</span></div>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <!-- Theme Selector Modal -->
+    <div id="themeModal" class="theme-modal">
+        <div class="theme-modal-header">Темы</div>
+        <div id="themeOptions">
+            <button data-theme="light" class="theme-option">
+                <span class="theme-option-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+                        <circle cx="12" cy="12" r="5" fill="#333" />
+                        <line x1="12" y1="1" x2="12" y2="4" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <line x1="12" y1="20" x2="12" y2="23" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <line x1="1" y1="12" x2="4" y2="12" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <line x1="20" y1="12" x2="23" y2="12" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <line x1="4.5" y1="4.5" x2="6.5" y2="6.5" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <line x1="17.5" y1="17.5" x2="19.5" y2="19.5" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <line x1="4.5" y1="19.5" x2="6.5" y2="17.5" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <line x1="17.5" y1="6.5" x2="19.5" y2="4.5" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </span>
+                <span>Светлая</span>
+            </button>
+            <button data-theme="dark" class="theme-option">
+                <span class="theme-option-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+                        <path d="M20.5 15.5a9 9 0 1 1-14-10.5" stroke="#333" stroke-width="2" stroke-linecap="round" fill="none" />
+                    </svg>
+                </span>
+                <span>Тёмная</span>
+            </button>
+            <button data-theme="teal" class="theme-option">
+                <span class="theme-option-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+                        <path d="M20 12c0 4.5-3.5 8-8 8s-8-3.5-8-8 3.5-8 8-8" stroke="#333" stroke-width="2" stroke-linecap="round" fill="none" />
+                        <path d="M8 16c2.5-1.5 4.5-3.5 6-6" stroke="#333" stroke-width="2" stroke-linecap="round" fill="none" />
+                    </svg>
+                </span>
+                <span>Морская волна</span>
+            </button>
+            <button data-theme="cappuccino" class="theme-option">
+                <span class="theme-option-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+                        <path d="M5 12h14" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <path d="M5 8h14" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <path d="M5 16h14" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                        <circle cx="12" cy="12" r="8" stroke="#333" stroke-width="2" fill="none" />
+                    </svg>
+                </span>
+                <span>Капучино</span>
+            </button>
+            <button data-theme="cyberpunk" class="theme-option">
+                <span class="theme-option-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+                        <rect x="4" y="4" width="16" height="16" rx="2" stroke="#333" stroke-width="2" fill="none" />
+                        <path d="M4 12h16" stroke="#333" stroke-width="2" />
+                        <path d="M12 4v16" stroke="#333" stroke-width="2" />
+                    </svg>
+                </span>
+                <span>Киберпанк</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <script>
+        // Tatar words with translations
+        const words = [
+            { tatar: "Сәлам", russian: "Привет" },
+            { tatar: "Рәхмәт", russian: "Спасибо" },
+            { tatar: "Сау бул", russian: "Пока" },
+            { tatar: "Бүген", russian: "Сегодня" },
+            { tatar: "Кичә", russian: "Вчера" },
+            { tatar: "Иртән", russian: "Завтра" },
+            { tatar: "Кеше", russian: "Человек" },
+            { tatar: "Эй, сез!", russian: "Эй, вы!" },
+            { tatar: "Исем", russian: "Имя" },
+            { tatar: "Фатир", russian: "Отец" },
+            { tatar: "Әни", russian: "Мама" },
+            { tatar: "Бала", russian: "Ребенок" },
+            { tatar: "Китап", russian: "Книга" },
+            { tatar: "Мәктәп", russian: "Школа" },
+            { tatar: "Өй", russian: "Дом" },
+            { tatar: "Су", russian: "Вода" },
+            { tatar: "Аш", russian: "Еда" },
+            { tatar: "Кояш", russian: "Солнце" },
+            { tatar: "Ай", russian: "Луна" },
+            { tatar: "Йорт", russian: "Дом, родина" },
+            { tatar: "Күңел", russian: "Сердце" },
+            { tatar: "Күз", russian: "Глаз" },
+            { tatar: "Кул", russian: "Рука" },
+            { tatar: "Аяк", russian: "Нога" },
+            { tatar: "Баш", russian: "Голова" },
+            { tatar: "Күк", russian: "Небо" },
+            { tatar: "Ер", russian: "Земля" },
+            { tatar: "Чүл", russian: "Пустыня" },
+            { tatar: "Яз", russian: "Лето" },
+            { tatar: "Кыш", russian: "Зима" },
+            { tatar: "Җәй", russian: "Весна" },
+            { tatar: "Көз", russian: "Осень" },
+            { tatar: "Төн", russian: "Ночь" },
+            { tatar: "Көн", russian: "День, солнце" },
+            { tatar: "Вакыт", russian: "Время" },
+            { tatar: "Ел", russian: "Год" },
+            { tatar: "Ат", russian: "Лошадь" },
+            { tatar: "Сака", russian: "Собака" },
+            { tatar: "Мәче", russian: "Кошка" },
+            { tatar: "Куш", russian: "Птица" },
+            { tatar: "Балык", russian: "Рыба" },
+            { tatar: "Чик", russian: "Граница" },
+            { tatar: "Шәһәр", russian: "Город" },
+            { tatar: "Ауыл", russian: "Деревня" },
+            { tatar: "Юл", russian: "Дорога" },
+            { tatar: "Трамвай", russian: "Трамвай" },
+            { tatar: "Автобус", russian: "Автобус" },
+            { tatar: "Машина", russian: "Машина" },
+            { tatar: "Велосипед", russian: "Велосипед" },
+            { tatar: "Туры", russian: "Прямо" },
+            { tatar: "Сул", russian: "Лево, левый" },
+            { tatar: "Уң", russian: "Право, правый" },
+            { tatar: "Арт", russian: "Сзади, назад" },
+            { tatar: "Алга", russian: "Вперед" },
+            { tatar: "Мондый", russian: "Такой" },
+            { tatar: "Бу", russian: "Быть, становиться" },
+            { tatar: "Ит", russian: "Делать" },
+            { tatar: "Күр", russian: "Видеть" },
+            { tatar: "Ишет", russian: "Слышать" },
+            { tatar: "Сөйләш", russian: "Говорить" },
+            { tatar: "Укы", russian: "Читать" },
+            { tatar: "Яз", russian: "Писать" },
+            { tatar: "Аш", russian: "Есть" },
+            { tatar: "Эч", russian: "Пить" },
+            { tatar: "Йокла", russian: "Спать" },
+            { tatar: "Уяны", russian: "Просыпаться" },
+            { tatar: "Кил", russian: "Приходить" },
+            { tatar: "Кит", russian: "Уходить" },
+            { tatar: "Бар", russian: "Идти" },
+            { tatar: "Тор", russian: "Стоять" },
+            { tatar: "Ят", russian: "Лежать" },
+            { tatar: "Утыр", russian: "Сидеть" },
+            { tatar: "Күтәр", russian: "Поднимать" },
+            { tatar: "Төш", russian: "Опускать, падать" },
+            { tatar: "Бетер", russian: "Уничтожать" },
+            { tatar: "Төз", russian: "Строить" },
+            { tatar: "Эзлә", russian: "Искать" },
+            { tatar: "Табы", russian: "Находить" },
+            { tatar: "Бел", russian: "Знать" },
+            { tatar: "Аңла", russian: "Понимать" },
+            { tatar: "Хис ит", russian: "Чувствовать" },
+            { tatar: "Хатирлә", russian: "Помнить" },
+            { tatar: "Оныт", russian: "Забывать" },
+            { tatar: "Ярат", russian: "Любить" },
+            { tatar: "Яктырт", russian: "Нравиться" },
+            { tatar: "Куркыныч", russian: "Бояться" },
+            { tatar: "Шатлан", russian: "Радоваться" },
+            { tatar: "Кыен", russian: "Огорчаться" },
+            { tatar: "Ял ит", russian: "Отдыхать" },
+            { tatar: "Эшлә", russian: "Работать" },
+            { tatar: "Уйна", russian: "Играть" },
+            { tatar: "Өйрән", russian: "Учиться" },
+            { tatar: "Мәгънә", russian: "Смысл, значение" },
+            { tatar: "Сүз", russian: "Слово" },
+            { tatar: "Тел", russian: "Язык" },
+            { tatar: "Хат", russian: "Письмо" },
+            { tatar: "Телефон", russian: "Телефон" },
+            { tatar: "Компьютер", russian: "Компьютер" },
+            { tatar: "Интернет", russian: "Интернет" },
+            { tatar: "Музей", russian: "Музей" },
+            { tatar: "Театр", russian: "Театр" },
+            { tatar: "Кинотеатр", russian: "Кинотеатр" },
+            { tatar: "Банк", russian: "Банк" },
+            { tatar: "Дөкан", russian: "Магазин" },
+            { tatar: "Ресторан", russian: "Ресторан" },
+            { tatar: "Кафе", russian: "Кафе" },
+            { tatar: "Гамәханә", russian: "Мечеть" },
+            { tatar: "Чиркәү", russian: "Церковь" },
+            { tatar: "Болыт", russian: "Облако" },
+            { tatar: "Яңгыр", russian: "Дождь" },
+            { tatar: "Кар", russian: "Снег" },
+            { tatar: "Шамал", russian: "Ветер" },
+            { tatar: "Боз", russian: "Лед" },
+            { tatar: "Ут", russian: "Огонь" },
+            { tatar: "Таш", russian: "Камень" },
+            { tatar: "Агач", russian: "Дерево" },
+            { tatar: "Чүп", russian: "Трава" },
+            { tatar: "Гүл", russian: "Цветок" },
+            { tatar: "Бодяк", russian: "Кустарник" },
+            { tatar: "Урман", russian: "Лес" },
+            { tatar: "Тау", russian: "Гора" },
+            { tatar: "Елга", russian: "Река" },
+            { tatar: "Күл", russian: "Озеро" },
+            { tatar: "Диңгездә", russian: "Море" },
+            { tatar: "Көтә", russian: "Носить (одежду)" },
+            { tatar: "Кием", russian: "Одежда" },
+            { tatar: "Аяк киеме", russian: "Обувь" },
+            { tatar: "Баш киеме", russian: "Головной убор" },
+            { tatar: "Кул киеме", russian: "Перчатки" },
+            { tatar: "Пальто", russian: "Пальто" },
+            { tatar: "Күлмәк", russian: "Шапка" },
+            { tatar: "Шарф", russian: "Шарф" },
+            { tatar: "Күзәй", russian: "Очки" },
+            { tatar: "Сәгать", russian: "Часы" },
+            { tatar: "Календарь", russian: "Календарь" },
+            { tatar: "Көндәлек", russian: "Ежедневник" },
+            { tatar: "Китапханә", russian: "Библиотека" },
+            { tatar: "Укытучы", russian: "Учитель" },
+            { tatar: "Укучы", russian: "Ученик" },
+            { tatar: "Дәрес", russian: "Урок" },
+            { tatar: "Билге", russian: "Оценка" },
+            { tatar: "Диплом", russian: "Диплом" },
+            { tatar: "Университет", russian: "Университет" },
+            { tatar: "Факультет", russian: "Факультет" },
+            { tatar: "Кафедра", russian: "Кафедра" },
+            { tatar: "Профessor", russian: "Профессор" },
+            { tatar: "Доктор", russian: "Доктор" },
+            { tatar: "Медсестра", russian: "Медсестра" },
+            { tatar: "Больница", russian: "Больница" },
+            { tatar: "Аптека", russian: "Аптека" },
+            { tatar: "Таблетка", russian: "Таблетка" },
+            { tatar: "Инъекция", russian: "Инъекция" },
+            { tatar: "Тулы", russian: "Полный" },
+            { tatar: "Буш", russian: "Пустой" },
+            { tatar: "Яңы", russian: "Новый" },
+            { tatar: "Иске", russian: "Старый" },
+            { tatar: "Зур", russian: "Большой" },
+            { tatar: "Кече", russian: "Маленький" },
+            { tatar: "Озын", russian: "Длинный" },
+            { tatar: "Кыска", russian: "Короткий" },
+            { tatar: "Киң", russian: "Широкий" },
+            { tatar: "Тар", russian: "Узкий" },
+            { tatar: "Югары", russian: "Высокий" },
+            { tatar: "Түбән", russian: "Низкий" },
+            { tatar: "Көчле", russian: "Сильный" },
+            { tatar: "Зәиф", russian: "Слабый" },
+            { tatar: "Тиз", russian: "Быстрый" },
+            { tatar: "Киче", russian: "Медленный" },
+            { tatar: "Яхшы", russian: "Хороший" },
+            { tatar: "Яман", russian: "Плохой" },
+            { tatar: "Матур", russian: "Красивый" },
+            { tatar: "Чүш", russian: "Некрасивый" },
+            { tatar: "Темиз", russian: "Чистый" },
+            { tatar: "Кирле", russian: "Грязный" },
+            { tatar: "Салкын", russian: "Холодный" },
+            { tatar: "Тыш", russian: "Жаркий" },
+            { tatar: "Суык", russian: "Прохладный" },
+            { tatar: "Күп", russian: "Много" },
+            { tatar: "Аз", russian: "Мало" },
+            { tatar: "Бер", russian: "Один" },
+            { tatar: "Ике", russian: "Два" },
+            { tatar: "Өч", russian: "Три" },
+            { tatar: "Дүрт", russian: "Четыре" },
+            { tatar: "Биш", russian: "Пять" },
+            { tatar: "Алты", russian: "Шесть" },
+            { tatar: "Чиде", russian: "Семь" },
+            { tatar: "Сигез", russian: "Восемь" },
+            { tatar: "Тугыз", russian: "Девять" },
+            { tatar: "Ун", russian: "Десять" }
+        ];
+
+        // Game state
+        let currentWord = null;
+        let score = 0;
+        // Get theme from URL parameter or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const themeFromUrl = urlParams.get('theme');
+        let currentTheme = themeFromUrl || localStorage.getItem('telegramTheme') || 'light';
+        
+        // DOM elements
+        const wordDisplay = document.getElementById('wordDisplay');
+        const translationInput = document.getElementById('translationInput');
+        const submitButton = document.getElementById('submitButton');
+        const scoreDisplay = document.getElementById('score');
+        const feedbackDisplay = document.getElementById('feedback');
+        const backButton = document.getElementById('backButton');
+        const gameContainer = document.getElementById('gameContainer');
+        const themeSelector = document.getElementById('themeSelector');
+        const themeModal = document.getElementById('themeModal');
+        const themeOptions = document.querySelectorAll('[data-theme]');
+        const modalOverlay = document.getElementById('modalOverlay');
+        
+        // Apply theme
+        document.body.className = currentTheme + '-theme';
+        
+        // Theme selector functionality
+        themeSelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (themeModal.style.display === 'block') {
+                themeModal.style.display = 'none';
+                modalOverlay.style.display = 'none';
+            } else {
+                themeModal.style.display = 'block';
+                modalOverlay.style.display = 'block';
+            }
+        });
+        
+        // Close modals when clicking overlay
+        modalOverlay.addEventListener('click', () => {
+            themeModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        });
+        
+        // Theme selection
+        themeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const theme = option.getAttribute('data-theme');
+                currentTheme = theme;
+                localStorage.setItem('telegramTheme', theme);
+                document.body.className = theme + '-theme';
+                themeModal.style.display = 'none';
+                modalOverlay.style.display = 'none';
+            });
+        });
+        
+        // Event listeners
+        translationInput.addEventListener('input', function() {
+            submitButton.disabled = !this.value.trim();
+        });
+        
+        translationInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter' && !submitButton.disabled) {
+                checkTranslation();
+            }
+        });
+        
+        submitButton.addEventListener('click', checkTranslation);
+        
+        backButton.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+        
+        // Start the game
+        function startGame() {
+            nextWord();
+            // Start floating words animation
+            setInterval(createFloatingWord, 3000);
+        }
+        
+        // Get next word
+        function nextWord() {
+            translationInput.value = '';
+            translationInput.disabled = false;
+            submitButton.disabled = true;
+            feedbackDisplay.textContent = '';
+            feedbackDisplay.className = 'feedback';
+            
+            // Select a random word
+            const randomIndex = Math.floor(Math.random() * words.length);
+            currentWord = words[randomIndex];
+            wordDisplay.textContent = currentWord.tatar;
+        }
+        
+        // Check translation
+        function checkTranslation() {
+            const userTranslation = translationInput.value.trim().toLowerCase();
+            const correctTranslation = currentWord.russian.toLowerCase();
+            
+            translationInput.disabled = true;
+            
+            if (userTranslation === correctTranslation) {
+                // Correct translation
+                score++;
+                scoreDisplay.textContent = score;
+                feedbackDisplay.textContent = 'Правильно!';
+                feedbackDisplay.className = 'feedback correct';
+            } else {
+                // Incorrect translation
+                feedbackDisplay.textContent = `Неправильно. Правильный перевод: ${currentWord.russian}`;
+                feedbackDisplay.className = 'feedback incorrect';
+            }
+            
+            // Move to next word after a delay
+            setTimeout(nextWord, 2000);
+        }
+        
+        // Create floating word
+        function createFloatingWord() {
+            const randomIndex = Math.floor(Math.random() * words.length);
+            const word = words[randomIndex];
+            
+            const floatingWord = document.createElement('div');
+            floatingWord.className = 'floating-word';
+            floatingWord.textContent = word.tatar;
+            
+            // Random starting position
+            const startX = Math.random() * (window.innerWidth - 100);
+            floatingWord.style.left = startX + 'px';
+            
+            gameContainer.appendChild(floatingWord);
+            
+            // Remove element after animation completes
+            setTimeout(() => {
+                if (floatingWord.parentNode) {
+                    floatingWord.parentNode.removeChild(floatingWord);
+                }
+            }, 8000);
+        }
+        
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', startGame);
+    </script>
+</body>
+</html>

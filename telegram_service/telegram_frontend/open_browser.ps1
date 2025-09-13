@@ -1,0 +1,1 @@
+Start-Process "file:///c:/Users/admin/Documents/job/telegram_service/telegram_frontend/index.html"

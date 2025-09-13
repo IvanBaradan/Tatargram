@@ -1,0 +1,3 @@
+"""
+Telegram CRM Service package
+"""

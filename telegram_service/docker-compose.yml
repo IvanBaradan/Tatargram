@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  telegram-service:
+    build: .
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    volumes:
+      - ./telegram_session.session:/app/telegram_session.session
+    restart: unless-stopped
