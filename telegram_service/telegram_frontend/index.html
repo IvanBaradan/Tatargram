@@ -195,6 +195,28 @@
             color: #b0b8c9;
         }
 
+        /* Custom scrollbar for dark theme */
+        body.dark-theme .chat-list::-webkit-scrollbar,
+        body.dark-theme .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        body.dark-theme .chat-list::-webkit-scrollbar-track,
+        body.dark-theme .messages-container::-webkit-scrollbar-track {
+            background: #14161a;
+        }
+
+        body.dark-theme .chat-list::-webkit-scrollbar-thumb,
+        body.dark-theme .messages-container::-webkit-scrollbar-thumb {
+            background: #23272b;
+            border-radius: 4px;
+        }
+
+        body.dark-theme .chat-list::-webkit-scrollbar-thumb:hover,
+        body.dark-theme .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #333941;
+        }
+
         /* Teal Theme */
         body.teal-theme {
             background-color: #A1D2D8;
@@ -310,6 +332,28 @@
         body.teal-theme .sender-name {
             opacity: 0.9;
             color: #005379ff;
+        }
+
+        /* Custom scrollbar for teal theme */
+        body.teal-theme .chat-list::-webkit-scrollbar,
+        body.teal-theme .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        body.teal-theme .chat-list::-webkit-scrollbar-track,
+        body.teal-theme .messages-container::-webkit-scrollbar-track {
+            background: #b2ebf2;
+        }
+
+        body.teal-theme .chat-list::-webkit-scrollbar-thumb,
+        body.teal-theme .messages-container::-webkit-scrollbar-thumb {
+            background: #7fd8d8;
+            border-radius: 4px;
+        }
+
+        body.teal-theme .chat-list::-webkit-scrollbar-thumb:hover,
+        body.teal-theme .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #5fb0c9ff;
         }
 
         /* Cappuccino Theme */
@@ -457,6 +501,28 @@
             color: #c8b3d6;
         }
 
+        /* Custom scrollbar for cappuccino theme */
+        body.cappuccino-theme .chat-list::-webkit-scrollbar,
+        body.cappuccino-theme .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        body.cappuccino-theme .chat-list::-webkit-scrollbar-track,
+        body.cappuccino-theme .messages-container::-webkit-scrollbar-track {
+            background: #16121a;
+        }
+
+        body.cappuccino-theme .chat-list::-webkit-scrollbar-thumb,
+        body.cappuccino-theme .messages-container::-webkit-scrollbar-thumb {
+            background: #2d243a;
+            border-radius: 4px;
+        }
+
+        body.cappuccino-theme .chat-list::-webkit-scrollbar-thumb:hover,
+        body.cappuccino-theme .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #3d2f47;
+        }
+
         /* Cyberpunk Theme */
         body.cyberpunk-theme {
             background-color: #000000;
@@ -589,6 +655,29 @@
         body.cyberpunk-theme .sender-name {
             opacity: 0.9;
             color: #00ff41;
+        }
+
+        /* Custom scrollbar for cyberpunk theme */
+        body.cyberpunk-theme .chat-list::-webkit-scrollbar,
+        body.cyberpunk-theme .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        body.cyberpunk-theme .chat-list::-webkit-scrollbar-track,
+        body.cyberpunk-theme .messages-container::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        body.cyberpunk-theme .chat-list::-webkit-scrollbar-thumb,
+        body.cyberpunk-theme .messages-container::-webkit-scrollbar-thumb {
+            background: #0a0a0a;
+            border-radius: 4px;
+            border: 1px solid #00ff41;
+        }
+
+        body.cyberpunk-theme .chat-list::-webkit-scrollbar-thumb:hover,
+        body.cyberpunk-theme .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #111111;
         }
 
         /* Theme Modal Styles */
@@ -1877,22 +1966,6 @@
             }
         }, 2000);
         
-        // Immediate load for demonstration purposes
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', async () => {
-                if (chats.length === 0) {
-                    await loadChats();
-                }
-            });
-        } else {
-            // DOM is already loaded
-            if (chats.length === 0) {
-                loadChats();
-            }
-        }
-    </script>
-</body>
-</html>
         // Immediate load for demonstration purposes
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', async () => {
