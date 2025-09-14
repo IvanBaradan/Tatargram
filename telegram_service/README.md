@@ -49,6 +49,21 @@ A service that pulls Telegram user conversations and displays them in a CRM-like
 
 2. Open `http://localhost:8001` in a web browser
 
+### GitHub Pages Deployment
+
+The frontend can be automatically deployed to GitHub Pages using GitHub Actions:
+
+1. The workflow is defined in `.github/workflows/deploy-frontend.yml`
+2. It automatically deploys when changes are pushed to the `main` branch
+3. The frontend will be available at `https://<username>.github.io/Tatargram/`
+
+To enable GitHub Pages for your repository:
+
+1. Go to your repository settings on GitHub
+2. Navigate to "Pages" in the left sidebar
+3. Under "Source", select "GitHub Actions"
+4. The site will be automatically deployed on the next push to `main`
+
 ## API Endpoints
 
 - `GET /api/chats` - Get all Telegram chats
