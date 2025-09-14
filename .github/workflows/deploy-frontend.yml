@@ -6,6 +6,7 @@ on:
     branches: ["main"]
     paths:
       - "telegram_service/telegram_frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -40,6 +41,9 @@ jobs:
           
           # Copy all frontend files to _site directory
           cp -r telegram_service/telegram_frontend/* _site/
+          
+          # Copy the main index.html to _site as well
+          cp index.html _site/
           
           # Ensure index.html exists in _site
           ls -la _site/
